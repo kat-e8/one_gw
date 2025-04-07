@@ -22,24 +22,23 @@ services:
       -n gateway
       -m 2048
       -r /restore.gwbk
-  db:
-    image: mariadb:10.10.2
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+      - MSSQL_PID=Developer
     ports:
-      - 3306:3306
+      - 1433:1433
     volumes:
-      - db-data:/var/lib/mysql
+      - sqlserver-data:/var/opt/mssql
+    restart: always
     networks:
       gateway-network:
         aliases:
           - main-db
-    environment:
-      - MARIADB_ROOT_PASSWORD=ignition
-      - MARIADB_DATABASE=ignition
-      - MARIADB_USER=ignition
-      - MARIADB_PASSWORD=ignition
-
 networks:
   gateway-network:
 volumes:
   gateway-data:
-  db-data:
+  sqlserver-data:
